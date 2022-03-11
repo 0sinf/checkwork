@@ -7,9 +7,9 @@ import route from "./routes";
 const app = express();
 const port = config.port || 3000;
 
-app.use("/api", route);
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/api", route);
 
 createConnection()
   .then(() => {
