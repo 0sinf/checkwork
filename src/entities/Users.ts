@@ -31,7 +31,7 @@ export class Users extends BaseEntity {
   isWorking: boolean;
 
   @Column({ nullable: true })
-  recordId: number;
+  startTime: Date;
 
   @OneToMany(() => Records, (record) => record.user)
   records: Records[];
