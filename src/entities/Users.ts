@@ -27,12 +27,6 @@ export class Users extends BaseEntity {
   @Column({ default: false })
   isValid: boolean;
 
-  @Column({ default: false })
-  isWorking: boolean;
-
-  @Column({ nullable: true })
-  startTime: Date;
-
   @OneToMany(() => Records, (record) => record.user)
   records: Records[];
 }
