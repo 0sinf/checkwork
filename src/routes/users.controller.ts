@@ -14,8 +14,8 @@ router.post("/", async (req, res) => {
 router.post("/verify", async (req, res) => {
   const validationKey = String(req.query.validationKey);
   const userService = new UserService();
-  await userService.verifyEmail(validationKey);
-  res.status(201).json();
+  const token = await userService.verifyEmail(validationKey);
+  res.status(201).json({ token });
 });
 
 export default router;
