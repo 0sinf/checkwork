@@ -11,4 +11,7 @@ export default {
     database: process.env.DB_DATABASE,
     port: Number(process.env.DB_PORT),
   },
+  bcrypt: {
+    salt: process.env.SALT,
+  },
 };

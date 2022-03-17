@@ -1,12 +1,19 @@
+import { hashSync } from "bcrypt";
+
 import { Users } from "../entities/Users";
+import config from "../config";
 
 export class UserService {
-  private User: Users;
-
-  constructor() {}
-
   private checkPasswordConfirm(password: string, passwordConfirm: string) {
     return password === passwordConfirm;
+  }
+
+  private async isExistEmail(email: string) {
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return false;
+    }
+    return true;
   }
 
   async createUser(
@@ -17,10 +24,13 @@ export class UserService {
     if (!this.checkPasswordConfirm(password, passwordConfirm)) {
       throw new Error("비밀번호를 확인해주세요!");
     }
+    if (this.isExistEmail(email)) {
+      throw new Error("이미 존재하는 이메일입니다!");
+    }
 
     const user = new Users();
     user.email = email;
-    user.password = password;
+    user.password = hashSync(password, config.bcrypt.salt);
     await user.save();
 
     return user.id;
