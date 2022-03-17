@@ -1,4 +1,5 @@
 import { hashSync } from "bcrypt";
+import * as uuid from "uuid";
 
 import { Users } from "../entities/Users";
 import config from "../config";
@@ -31,6 +32,7 @@ export class UserService {
     const user = new Users();
     user.email = email;
     user.password = hashSync(password, config.bcrypt.salt);
+    user.validationKey = uuid.v1();
     await user.save();
 
     return user.id;

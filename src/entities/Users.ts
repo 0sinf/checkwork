@@ -18,7 +18,7 @@ export class Users extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ nullable: true })
+  @Column()
   validationKey: string;
 
   @Column({ default: 0 })
