@@ -48,4 +48,17 @@ export class UserService {
 
     return user.id;
   }
+
+  async verifyEmail(validationKey: string): Promise<void> {
+    const user = await Users.findOne({ validationKey });
+    if (!user) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+    user.isValid = true;
+    await user.save();
+
+    // TODO: 로그인 되도록
+
+    return;
+  }
 }
