@@ -25,7 +25,7 @@ export class UserService {
     if (!this.checkPasswordConfirm(password, passwordConfirm)) {
       throw new Error("비밀번호를 확인해주세요!");
     }
-    if (this.isExistEmail(email)) {
+    if (await this.isExistEmail(email)) {
       throw new Error("이미 존재하는 이메일입니다!");
     }
 

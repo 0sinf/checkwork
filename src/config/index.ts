@@ -12,6 +12,13 @@ export default {
     port: Number(process.env.DB_PORT),
   },
   bcrypt: {
-    salt: process.env.SALT,
+    salt: Number(process.env.SALT),
+  },
+  email: {
+    service: process.env.EMAIL_SERVICE,
+    auth: {
+      user: process.env.EMAIL_AUTH_USER,
+      pass: process.env.EMAIL_AUTH_PASS,
+    },
   },
 };
