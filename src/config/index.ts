@@ -20,5 +20,6 @@ export default {
       user: process.env.EMAIL_AUTH_USER,
       pass: process.env.EMAIL_AUTH_PASS,
     },
+    baseUrl: "http://localhost:3000",
   },
 };
