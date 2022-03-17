@@ -7,7 +7,7 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   // email, password 로 유저 불러오고, 그 유저로 로그인하고
   const userService = new UserService();
-  const token = userService.loginUser(email, password);
+  const token = await userService.loginUser(email, password);
   res.status(201).json({ token });
 });
 
