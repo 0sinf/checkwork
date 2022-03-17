@@ -8,6 +8,14 @@ export class UserService {
     return password === passwordConfirm;
   }
 
+  private async isExistEmail(email: string) {
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+
   async createUser(
     email: string,
     password: string,
@@ -15,6 +23,9 @@ export class UserService {
   ): Promise<number> {
     if (!this.checkPasswordConfirm(password, passwordConfirm)) {
       throw new Error("비밀번호를 확인해주세요!");
+    }
+    if (this.isExistEmail(email)) {
+      throw new Error("이미 존재하는 이메일입니다!");
     }
 
     const user = new Users();
