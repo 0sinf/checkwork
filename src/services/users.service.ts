@@ -4,12 +4,16 @@ import * as uuid from "uuid";
 import { Users } from "../entities/Users";
 import config from "../config";
 import { EmailService } from "./emails.service";
+import { AuthService } from "./auths.service";
 
 export class UserService {
   private emailService: EmailService;
 
+  private authService: AuthService;
+
   constructor() {
     this.emailService = new EmailService();
+    this.authService = new AuthService();
   }
 
   private checkPasswordConfirm(password: string, passwordConfirm: string) {
@@ -49,7 +53,7 @@ export class UserService {
     return user.id;
   }
 
-  async verifyEmail(validationKey: string): Promise<void> {
+  async verifyEmail(validationKey: string) {
     const user = await Users.findOne({ validationKey });
     if (!user) {
       throw new Error("존재하지 않는 유저입니다.");
@@ -57,8 +61,6 @@ export class UserService {
     user.isValid = true;
     await user.save();
 
-    // TODO: 로그인 되도록
-
-    return;
+    return this.authService.login({ id: user.id, email: user.email });
   }
 }

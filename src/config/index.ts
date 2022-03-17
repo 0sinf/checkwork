@@ -22,4 +22,7 @@ export default {
     },
     baseUrl: "http://localhost:3000",
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
 };
