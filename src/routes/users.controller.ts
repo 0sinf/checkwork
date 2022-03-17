@@ -11,4 +11,11 @@ router.post("/", async (req, res) => {
   res.status(201).json({ userId });
 });
 
+router.post("/verify", async (req, res) => {
+  const validationKey = String(req.query.validationKey);
+  const userService = new UserService();
+  await userService.verifyEmail(validationKey);
+  res.status(201).json();
+});
+
 export default router;
