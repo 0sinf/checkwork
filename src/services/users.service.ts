@@ -1,10 +1,9 @@
+import { hashSync } from "bcrypt";
+
 import { Users } from "../entities/Users";
+import config from "../config";
 
 export class UserService {
-  private User: Users;
-
-  constructor() {}
-
   private checkPasswordConfirm(password: string, passwordConfirm: string) {
     return password === passwordConfirm;
   }
@@ -20,7 +19,7 @@ export class UserService {
 
     const user = new Users();
     user.email = email;
-    user.password = password;
+    user.password = hashSync(password, config.bcrypt.salt);
     await user.save();
 
     return user.id;
