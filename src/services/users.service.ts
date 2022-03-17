@@ -1,10 +1,10 @@
-import { hashSync } from "bcrypt";
+import { hashSync, compareSync } from "bcrypt";
 import * as uuid from "uuid";
 
 import { Users } from "../entities/Users";
-import config from "../config";
 import { EmailService } from "./emails.service";
 import { AuthService } from "./auths.service";
+import config from "../config";
 
 export class UserService {
   private emailService: EmailService;
@@ -14,6 +14,10 @@ export class UserService {
   constructor() {
     this.emailService = new EmailService();
     this.authService = new AuthService();
+  }
+
+  private isCorrectPassword(hashedPassword: string, password: string) {
+    return compareSync(password, hashedPassword);
   }
 
   private checkPasswordConfirm(password: string, passwordConfirm: string) {
@@ -60,6 +64,19 @@ export class UserService {
     }
     user.isValid = true;
     await user.save();
+
+    return this.authService.login({ id: user.id, email: user.email });
+  }
+
+  async loginUser(email: string, password: string) {
+    const user = await Users.findOne({ email });
+    if (!user) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+
+    if (!this.isCorrectPassword(user.password, password)) {
+      throw new Error("비밀번호가 일치하지 않습니다.");
+    }
 
     return this.authService.login({ id: user.id, email: user.email });
   }
