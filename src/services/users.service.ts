@@ -85,4 +85,9 @@ export class UserService {
     await Users.update({ id }, { wage });
     return;
   }
+
+  async getUserInfo(id: number) {
+    const user = await Users.findOne({ id });
+    return { email: user.email, wage: user.wage };
+  }
 }

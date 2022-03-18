@@ -1,10 +1,20 @@
 import { Router } from "express";
 
 import { UserService } from "../services/users.service";
-import { AuthService } from "../services/auths.service";
 import loginRequired from "../middlewares/loginRequired";
+import checkUser from "../utils/checkUser";
 
 const router = Router();
+
+router.get("/:id", loginRequired, async (req, res) => {
+  const userId = Number(req.params.id);
+  const token = req.headers.authorization.split("Bearer ")[1];
+  const { id } = checkUser(token, userId);
+
+  const userService = new UserService();
+  const user = await userService.getUserInfo(id);
+  res.json({ user });
+});
 
 router.post("/", async (req, res) => {
   const { email, password, passwordConfirm } = req.body;
@@ -23,8 +33,7 @@ router.post("/verify", async (req, res) => {
 router.patch("/:id", loginRequired, async (req, res) => {
   const userId = Number(req.params.id);
   const token = req.headers.authorization.split("Bearer ")[1];
-  const authService = new AuthService();
-  const { id } = authService.checkUser(token, userId);
+  const { id } = checkUser(token, userId);
 
   const { wage } = req.body;
   const userService = new UserService();
