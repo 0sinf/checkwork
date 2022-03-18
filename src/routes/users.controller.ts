@@ -6,6 +6,17 @@ import loginRequired from "../middlewares/loginRequired";
 
 const router = Router();
 
+router.get("/:id", loginRequired, async (req, res) => {
+  const userId = Number(req.params.id);
+  const token = req.headers.authorization.split("Bearer ")[1];
+  const authService = new AuthService();
+  const { id } = authService.checkUser(token, userId);
+
+  const userService = new UserService();
+  const user = await userService.getUserInfo(id);
+  res.json({ user });
+});
+
 router.post("/", async (req, res) => {
   const { email, password, passwordConfirm } = req.body;
   const userService = new UserService();
