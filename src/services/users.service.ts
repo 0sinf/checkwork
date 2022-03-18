@@ -80,4 +80,9 @@ export class UserService {
 
     return this.authService.login({ id: user.id, email: user.email });
   }
+
+  async updateWage(id: number, wage: number) {
+    await Users.update({ id }, { wage });
+    return;
+  }
 }
