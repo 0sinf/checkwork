@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import { User } from "user";
 
 export default function checkUser(token: string, userId: number) {
   const { id, email } = jwt.decode(token) as User;

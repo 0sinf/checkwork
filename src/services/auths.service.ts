@@ -1,4 +1,5 @@
 import * as jwt from "jsonwebtoken";
+import { User } from "user";
 
 import config from "../config";
 
