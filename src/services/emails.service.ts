@@ -1,5 +1,6 @@
 import Mail = require("nodemailer/lib/mailer");
 import * as nodemailer from "nodemailer";
+import { Service } from "typedi";
 
 import config from "../config";
 
@@ -9,6 +10,7 @@ interface EmailOpts {
   html: string;
 }
 
+@Service()
 export class EmailService {
   private transporter: Mail;
 

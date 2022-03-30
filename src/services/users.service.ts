@@ -1,20 +1,18 @@
 import { hashSync, compareSync } from "bcrypt";
 import * as uuid from "uuid";
+import { Inject, Service } from "typedi";
 
 import { Users } from "../entities/Users";
 import { EmailService } from "./emails.service";
 import { AuthService } from "./auths.service";
 import config from "../config";
 
+@Service()
 export class UserService {
-  private emailService: EmailService;
-
-  private authService: AuthService;
-
-  constructor() {
-    this.emailService = new EmailService();
-    this.authService = new AuthService();
-  }
+  constructor(
+    @Inject() private emailService: EmailService,
+    @Inject() private authService: AuthService
+  ) {}
 
   private isCorrectPassword(hashedPassword: string, password: string) {
     return compareSync(password, hashedPassword);

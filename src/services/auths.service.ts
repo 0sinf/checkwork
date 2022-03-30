@@ -1,8 +1,10 @@
 import * as jwt from "jsonwebtoken";
+import { Service } from "typedi";
 import { User } from "user";
 
 import config from "../config";
 
+@Service()
 export class AuthService {
   login(user: User) {
     const payload = { ...user };
