@@ -1,4 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import userRepository from "../models/users.model";
+import * as userRepository from "../models/users.model";
 
-export default {};
+export async function createUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const userId = await userRepository.create(req.body);
+}
