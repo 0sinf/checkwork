@@ -8,8 +8,14 @@ const createUserSchema = Joi.object({
   wage: Joi.number().required(),
 });
 
+const updateUserSchema = Joi.object({
+  company: Joi.string(),
+  wage: Joi.number(),
+});
+
 const Validators = {
   createUser: createUserSchema,
+  updateUser: updateUserSchema,
 };
 
 export default function validator(validator: string) {
