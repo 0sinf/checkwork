@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "NODE_ENV=production node dist/app.js",
     "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
-    "test": "NODE_ENV=test jest --forceExit"
+    "test": "NODE_ENV=test jest --forceExit --runInBand"
   },
   "author": "",
   "license": "ISC",
