@@ -6,12 +6,12 @@ import {
   MockResponse,
 } from "node-mocks-http";
 
-import * as userController from "../src/controllers/users.controller";
-import userRepository from "../src/models/users.model";
+import * as userController from "../../src/controllers/users.controller";
+import userRepository from "../../src/models/users.model";
 
 let req: MockRequest<Request>, res: MockResponse<Response>, next: NextFunction;
 
-jest.mock("../src/models/users.model", () => ({
+jest.mock("../../src/models/users.model", () => ({
   save: jest.fn(),
 }));
 

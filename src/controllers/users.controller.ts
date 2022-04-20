@@ -8,7 +8,7 @@ export async function createUser(
 ) {
   try {
     const userId = await userRepository.save(req.body);
-    res.status(201).json(userId);
+    res.status(201).json({ userId });
   } catch (error) {
     next(error);
   }
