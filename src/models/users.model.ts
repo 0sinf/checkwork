@@ -50,7 +50,7 @@ class User {
       UPDATE users
         SET ${getAllSetStrings.join(",")} 
         WHERE id=$${getAllSetStrings.length + 1}
-        RETURNING *
+        RETURNING company, wage
     `;
     const result = await client.query(query, [...getAllValues, userId]);
     client.release();
