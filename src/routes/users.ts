@@ -6,5 +6,6 @@ const userRouter = Router();
 
 userRouter.get("/:userId", userController.getUser);
 userRouter.post("/", validator("createUser"), userController.createUser);
+userRouter.patch("/:userId", userController.updateUser);
 
 export default userRouter;
