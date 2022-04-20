@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import pool from "./pool";
-import { UserCreateRequest } from "users";
+import { UserCreateRequest, UserUpdateRequest } from "users";
 
 class User {
   private pool: Pool;
@@ -35,6 +35,42 @@ class User {
     client.release();
 
     return result.rows[0];
+  }
+
+  async findByIdAndUpdate(
+    userId: number,
+    userUpdateRequest: UserUpdateRequest
+  ) {
+    const [getAllSetStrings, getAllValues] = Object.entries(userUpdateRequest)
+      .filter(([, value]) => value !== undefined)
+      .reduce(this.setUpdateQuerySet, [[], []]);
+
+    const client = await this.pool.connect();
+    const query = `
+      UPDATE users
+        SET ${getAllSetStrings.join(",")} 
+        WHERE id=$${getAllSetStrings.length + 1}
+        RETURNING *
+    `;
+    const result = await client.query(query, [...getAllValues, userId]);
+    client.release();
+
+    if (result.rowCount === 0) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+
+    return result.rows[0];
+  }
+
+  private setUpdateQuerySet(
+    prev: [string[], string[]],
+    curr: [string, any],
+    idx: number
+  ) {
+    const [key, value] = curr;
+    prev[0].push(`${key}=$${idx + 1}`);
+    prev[1].push(value);
+    return prev;
   }
 }
 
