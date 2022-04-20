@@ -13,3 +13,13 @@ export async function createUser(
     next(error);
   }
 }
+
+export async function getUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.params;
+    const user = await userRepository.findById(+userId);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}

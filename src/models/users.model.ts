@@ -25,6 +25,17 @@ class User {
     client.release();
     return result.rows[0].id;
   }
+
+  async findById(userId: number) {
+    const client = await this.pool.connect();
+    const query = `
+      SELECT * FROM users WHERE id=$1
+    `;
+    const result = await client.query(query, [userId]);
+    client.release();
+
+    return result.rows[0];
+  }
 }
 
 const userRepository = new User();

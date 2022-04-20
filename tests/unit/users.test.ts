@@ -13,6 +13,7 @@ let req: MockRequest<Request>, res: MockResponse<Response>, next: NextFunction;
 
 jest.mock("../../src/models/users.model", () => ({
   save: jest.fn(),
+  findById: jest.fn(),
 }));
 
 const newUser = {
@@ -21,11 +22,43 @@ const newUser = {
   company: "company",
   wage: 10000,
 };
+const userId = "1";
 
 beforeEach(() => {
   req = createRequest();
   res = createResponse();
   next = jest.fn();
+});
+
+describe("user controller getUser", () => {
+  beforeEach(() => {
+    req.params.userId = userId;
+  });
+
+  it("should exist getUser", () => {
+    expect(typeof userController.getUser).toEqual("function");
+  });
+
+  it("should call findById", async () => {
+    await userController.getUser(req, res, null);
+    expect(userRepository.findById).toBeCalledWith(+userId);
+  });
+
+  it("should return 200 and user", async () => {
+    (userRepository.findById as jest.Mock).mockReturnValue(newUser);
+    await userController.getUser(req, res, null);
+    expect(res.statusCode).toEqual(200);
+    expect(res._getJSONData()).toEqual(newUser);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it("should handle errors", async () => {
+    const errorMessage = { message: "error" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    (userRepository.findById as jest.Mock).mockReturnValue(rejectedPromise);
+    await userController.getUser(req, res, next);
+    expect(next).toBeCalledWith(errorMessage);
+  });
 });
 
 describe("user controller createUser", () => {
