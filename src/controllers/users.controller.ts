@@ -23,3 +23,17 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
     next(error);
   }
 }
+
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { userId } = req.params;
+    const user = await userRepository.findByIdAndUpdate(+userId, req.body);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+}

@@ -4,3 +4,8 @@ export interface UserCreateRequest {
   company: string;
   wage: number;
 }
+
+export interface UserUpdateRequest {
+  company: string;
+  wage: number;
+}

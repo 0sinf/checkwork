@@ -26,4 +26,15 @@ describe("user integration test", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.name).toEqual(newUser.name);
   });
+
+  it("PATCH /api/users/:userId", async () => {
+    const updateUser = { company: "updated company", wage: 15000 };
+
+    const res = await request(app)
+      .patch(`/api/users/${userId}`)
+      .send(updateUser);
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.company).toEqual(updateUser.company);
+  });
 });
