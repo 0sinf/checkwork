@@ -1,12 +1,6 @@
 import { Pool } from "pg";
 import pool from "./pool";
-
-interface userCreateRequest {
-  name: string;
-  email: string;
-  company: string;
-  wage: number;
-}
+import { UserCreateRequest } from "users";
 
 class User {
   private readonly pool: Pool;
@@ -15,7 +9,7 @@ class User {
     this.pool = pool;
   }
 
-  async save(userCreateRequest: userCreateRequest) {
+  async save(userCreateRequest: UserCreateRequest) {
     const client = await this.pool.connect();
 
     const query = `
