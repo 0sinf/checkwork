@@ -37,3 +37,17 @@ export async function updateUser(
     next(error);
   }
 }
+
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { userId } = req.params;
+    await userRepository.findByIdAndDelete(+userId);
+    res.json();
+  } catch (error) {
+    next(error);
+  }
+}
