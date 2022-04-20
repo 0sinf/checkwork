@@ -37,4 +37,10 @@ describe("user integration test", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.company).toEqual(updateUser.company);
   });
+
+  it("DELETE /api/users/:userId", async () => {
+    const res = await request(app).delete(`/api/users/${userId}`).send();
+
+    expect(res.statusCode).toEqual(200);
+  });
 });

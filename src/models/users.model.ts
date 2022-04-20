@@ -72,6 +72,22 @@ class User {
     prev[1].push(value);
     return prev;
   }
+
+  async findByIdAndDelete(userId: number) {
+    const client = await this.pool.connect();
+
+    const query = `
+      DELETE FROM users WHERE id=$1
+    `;
+
+    const result = await client.query(query, [userId]);
+
+    client.release();
+
+    if (result.rowCount === 0) {
+      throw new Error("존재하지 않는 유저입니다.");
+    }
+  }
 }
 
 const userRepository = new User();

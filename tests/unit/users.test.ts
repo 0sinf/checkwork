@@ -15,6 +15,7 @@ jest.mock("../../src/models/users.model", () => ({
   save: jest.fn(),
   findById: jest.fn(),
   findByIdAndUpdate: jest.fn(),
+  findByIdAndDelete: jest.fn(),
 }));
 
 const newUser = {
@@ -29,6 +30,37 @@ beforeEach(() => {
   req = createRequest();
   res = createResponse();
   next = jest.fn();
+});
+
+describe("user controller deleteUser", () => {
+  beforeEach(() => {
+    req.params.userId = userId;
+  });
+
+  it("should exist deleteUser", () => {
+    expect(typeof userController.deleteUser).toEqual("function");
+  });
+
+  it("should call findByIdAndDelete", async () => {
+    await userController.deleteUser(req, res, null);
+    expect(userRepository.findByIdAndDelete).toBeCalledWith(+userId);
+  });
+
+  it("should return 200", async () => {
+    await userController.deleteUser(req, res, null);
+    expect(res.statusCode).toEqual(200);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it("should handle errors", async () => {
+    const error = { message: "error" };
+    const rejectedPromise = Promise.reject(error);
+    (userRepository.findByIdAndDelete as jest.Mock).mockReturnValue(
+      rejectedPromise
+    );
+    await userController.deleteUser(req, res, next);
+    expect(next).toBeCalledWith(error);
+  });
 });
 
 describe("user controller updateUser", () => {
