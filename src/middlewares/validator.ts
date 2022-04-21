@@ -15,9 +15,15 @@ const updateUserSchema = Joi.object({
   wage: Joi.number(),
 });
 
+const loginUserSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
 const Validators = {
   createUser: createUserSchema,
   updateUser: updateUserSchema,
+  loginUser: loginUserSchema,
 };
 
 export default function validator(validator: string) {

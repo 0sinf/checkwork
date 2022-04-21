@@ -17,6 +17,6 @@ userRouter.patch(
 
 userRouter.delete("/:userId", userController.deleteUser);
 
-userRouter.post("/login", authController.login);
+userRouter.post("/login", validator("loginUser"), authController.login);
 
 export default userRouter;
