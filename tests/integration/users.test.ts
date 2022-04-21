@@ -1,17 +1,27 @@
 import request from "supertest";
 import app from "../../src/app";
+import { generateJsonWebToken } from "../../src/utils/jwt";
+
+const newUser = {
+  name: "name",
+  email: "email@email.com",
+  password: "password",
+  passwordConfirm: "password",
+  company: "company",
+  wage: 10000,
+};
+
+const token =
+  "Bearer " +
+  generateJsonWebToken({
+    name: newUser.name,
+    email: newUser.email,
+    company: newUser.company,
+    wage: newUser.wage,
+  });
 
 describe("user integration test", () => {
   let userId: number;
-
-  const newUser = {
-    name: "name",
-    email: "email@email.com",
-    password: "password",
-    passwordConfirm: "password",
-    company: "company",
-    wage: 10000,
-  };
 
   it("POST /api/users", async () => {
     const res = await request(app).post("/api/users").send(newUser);
@@ -23,7 +33,10 @@ describe("user integration test", () => {
   });
 
   it("GET /api/users/:userId", async () => {
-    const res = await request(app).get(`/api/users/${userId}`).send();
+    const res = await request(app)
+      .get(`/api/users/${userId}`)
+      .set("authorization", token)
+      .send();
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.name).toEqual(newUser.name);
