@@ -47,6 +47,7 @@ describe("user integration test", () => {
 
     const res = await request(app)
       .patch(`/api/users/${userId}`)
+      .set("authorization", token)
       .send(updateUser);
 
     expect(res.statusCode).toEqual(200);
@@ -66,7 +67,10 @@ describe("user integration test", () => {
   });
 
   it("DELETE /api/users/:userId", async () => {
-    const res = await request(app).delete(`/api/users/${userId}`).send();
+    const res = await request(app)
+      .delete(`/api/users/${userId}`)
+      .set("authorization", token)
+      .send();
 
     expect(res.statusCode).toEqual(200);
   });
