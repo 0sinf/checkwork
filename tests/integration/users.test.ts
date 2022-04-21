@@ -47,7 +47,9 @@ describe("user integration test", () => {
     });
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body.name).toEqual(newUser.name);
+    expect(res.headers["set-cookie"][0].split("; ")[0]).toContain(
+      "access-token"
+    );
   });
 
   it("DELETE /api/users/:userId", async () => {

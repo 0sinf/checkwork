@@ -53,7 +53,6 @@ describe("auth controller login", () => {
     await authConroller.login(req, res, null);
 
     expect(res.statusCode).toEqual(200);
-    expect(res._getJSONData()).toEqual(userExceptPassword);
     expect(res._isEndCalled()).toBeTruthy();
   });
 
