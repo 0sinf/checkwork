@@ -40,7 +40,7 @@ class UserRepositoryImpl implements UserRepository {
   async findById(userId: number) {
     const client = await this.pool.connect();
     const query = `
-      SELECT name, email, password, company, wage FROM users WHERE id=$1
+      SELECT id, name, email, password, company, wage FROM users WHERE id=$1
     `;
     const result = await client.query(query, [userId]);
     client.release();
@@ -51,7 +51,7 @@ class UserRepositoryImpl implements UserRepository {
   async findByEmail(email: string): Promise<User> {
     const client = await this.pool.connect();
     const query = `
-      SELECT name, email, password, company, wage
+      SELECT id, name, email, password, company, wage
         FROM users
         WHERE email=$1
     `;

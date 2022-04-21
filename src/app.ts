@@ -10,7 +10,8 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(400).json(error);
+  console.log(error.message);
+  res.status(400).json({ message: error.message });
 });
 
 app.listen(config.port, () => {
