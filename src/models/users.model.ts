@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import pool from "./pool";
-import { UserCreateRequest, UserUpdateRequest } from "users";
+import { UserCreateRequest, UserRepository, UserUpdateRequest } from "users";
 
-class User {
+class UserRepositoryImpl implements UserRepository {
   private pool: Pool;
 
   constructor() {
@@ -10,18 +10,24 @@ class User {
   }
 
   async save(userCreateRequest: UserCreateRequest) {
-    const { name, email, company, wage } = userCreateRequest;
+    const { name, email, company, wage, password } = userCreateRequest;
 
     const client = await this.pool.connect();
 
     const query = `
       INSERT INTO 
-        users (name, email, company, wage)
+        users (name, email, password, company, wage)
       VALUES 
-        ($1, $2, $3, $4)
+        ($1, $2, $3, $4, $5)
       RETURNING id`;
 
-    const result = await client.query(query, [name, email, company, wage]);
+    const result = await client.query(query, [
+      name,
+      email,
+      password,
+      company,
+      wage,
+    ]);
     client.release();
     return result.rows[0].id;
   }
@@ -29,7 +35,7 @@ class User {
   async findById(userId: number) {
     const client = await this.pool.connect();
     const query = `
-      SELECT * FROM users WHERE id=$1
+      SELECT name, email, password, company, wage FROM users WHERE id=$1
     `;
     const result = await client.query(query, [userId]);
     client.release();
@@ -90,6 +96,6 @@ class User {
   }
 }
 
-const userRepository = new User();
+const userRepository = new UserRepositoryImpl();
 
 export default userRepository;

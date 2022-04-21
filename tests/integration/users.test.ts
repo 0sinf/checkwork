@@ -7,6 +7,8 @@ describe("user integration test", () => {
   const newUser = {
     name: "name",
     email: "email@email.com",
+    password: "password",
+    passwordConfirm: "password",
     company: "company",
     wage: 10000,
   };
@@ -22,7 +24,7 @@ describe("user integration test", () => {
 
   it("GET /api/users/:userId", async () => {
     const res = await request(app).get(`/api/users/${userId}`).send();
-
+    console.log(res.body);
     expect(res.statusCode).toEqual(200);
     expect(res.body.name).toEqual(newUser.name);
   });
