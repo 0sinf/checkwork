@@ -16,10 +16,14 @@ class AuthService {
     }
 
     const { password: hashedPassword, ...userExceptPassword } = user;
-    if (!bcrypt.compareSync(password, hashedPassword)) {
+    if (this.isIncorrectPassword(password, hashedPassword)) {
       throw new Error("비밀번호가 일치하지 않습니다.");
     }
     return userExceptPassword;
+  }
+
+  private isIncorrectPassword(password: string, hashedPassword: string) {
+    return !bcrypt.compareSync(password, hashedPassword);
   }
 }
 
