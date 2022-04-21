@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,4 +16,8 @@ export default {
   jwt: {
     payload: process.env.JWT_PAYLOAD,
   },
+=======
+export default {
+  port: Number(process.env.PORT) || 3000,
+>>>>>>> 8fdf641 (Fix app.ts)
 };
