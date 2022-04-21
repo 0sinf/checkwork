@@ -1,7 +1,7 @@
-import { AuthService, authService } from "../../src/services/auths.service";
-import userRepository from "../../src/models/users.model";
+import authService, { AuthService } from "../../../src/services/auths.service";
+import userRepository from "../../../src/models/users.model";
 
-jest.mock("../../src/models/users.model", () => ({
+jest.mock("../../../src/models/users.model", () => ({
   findByEmail: jest.fn(),
 }));
 
