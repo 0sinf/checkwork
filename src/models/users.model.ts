@@ -1,27 +1,38 @@
 import { Pool } from "pg";
 import pool from "./pool";
-import { UserCreateRequest, UserUpdateRequest } from "users";
+import {
+  User,
+  UserCreateRequest,
+  UserRepository,
+  UserUpdateRequest,
+} from "users";
 
-class User {
+class UserRepositoryImpl implements UserRepository {
   private pool: Pool;
 
   constructor() {
     this.pool = pool;
   }
 
-  async save(userCreateRequest: UserCreateRequest) {
-    const { name, email, company, wage } = userCreateRequest;
+  async save(userCreateRequest: Omit<UserCreateRequest, "passwordConfirm">) {
+    const { name, email, company, wage, password } = userCreateRequest;
 
     const client = await this.pool.connect();
 
     const query = `
       INSERT INTO 
-        users (name, email, company, wage)
+        users (name, email, password, company, wage)
       VALUES 
-        ($1, $2, $3, $4)
+        ($1, $2, $3, $4, $5)
       RETURNING id`;
 
-    const result = await client.query(query, [name, email, company, wage]);
+    const result = await client.query(query, [
+      name,
+      email,
+      password,
+      company,
+      wage,
+    ]);
     client.release();
     return result.rows[0].id;
   }
@@ -29,11 +40,23 @@ class User {
   async findById(userId: number) {
     const client = await this.pool.connect();
     const query = `
-      SELECT * FROM users WHERE id=$1
+      SELECT name, email, password, company, wage FROM users WHERE id=$1
     `;
     const result = await client.query(query, [userId]);
     client.release();
 
+    return result.rows[0];
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const client = await this.pool.connect();
+    const query = `
+      SELECT name, email, password, company, wage
+        FROM users
+        WHERE email=$1
+    `;
+    const result = await client.query(query, [email]);
+    client.release();
     return result.rows[0];
   }
 
@@ -90,6 +113,6 @@ class User {
   }
 }
 
-const userRepository = new User();
+const userRepository = new UserRepositoryImpl();
 
 export default userRepository;

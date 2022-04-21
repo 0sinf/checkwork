@@ -8,6 +8,7 @@ import {
 
 import * as userController from "../../src/controllers/users.controller";
 import userRepository from "../../src/models/users.model";
+import userService from "../../src/services/users.service";
 
 let req: MockRequest<Request>, res: MockResponse<Response>, next: NextFunction;
 
@@ -16,6 +17,10 @@ jest.mock("../../src/models/users.model", () => ({
   findById: jest.fn(),
   findByIdAndUpdate: jest.fn(),
   findByIdAndDelete: jest.fn(),
+}));
+
+jest.mock("../../src/services/users.service", () => ({
+  createUser: jest.fn(),
 }));
 
 const newUser = {
@@ -147,7 +152,7 @@ describe("user controller createUser", () => {
 
   it("should call save", async () => {
     await userController.createUser(req, res, null);
-    expect(userRepository.save).toBeCalledWith(newUser);
+    expect(userService.createUser).toBeCalledWith(newUser);
   });
 
   it("should return 201", async () => {
@@ -159,7 +164,7 @@ describe("user controller createUser", () => {
   it("should handle errors", async () => {
     const errorMessage = { message: "error" };
     const rejectedPromise = Promise.reject(errorMessage);
-    (userRepository.save as jest.Mock).mockReturnValue(rejectedPromise);
+    (userService.createUser as jest.Mock).mockReturnValue(rejectedPromise);
     await userController.createUser(req, res, next);
     expect(next).toBeCalledWith(errorMessage);
   });

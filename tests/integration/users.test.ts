@@ -7,6 +7,8 @@ describe("user integration test", () => {
   const newUser = {
     name: "name",
     email: "email@email.com",
+    password: "password",
+    passwordConfirm: "password",
     company: "company",
     wage: 10000,
   };
