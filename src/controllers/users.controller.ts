@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import userRepository from "../models/users.model";
+import userService from "../services/users.service";
 
 export async function createUser(
   req: Request,
@@ -7,7 +8,7 @@ export async function createUser(
   next: NextFunction
 ) {
   try {
-    const userId = await userRepository.save(req.body);
+    const userId = await userService.createUser(req.body);
     res.status(201).json({ userId });
   } catch (error) {
     next(error);

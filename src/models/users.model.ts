@@ -1,6 +1,11 @@
 import { Pool } from "pg";
 import pool from "./pool";
-import { UserCreateRequest, UserRepository, UserUpdateRequest } from "users";
+import {
+  User,
+  UserCreateRequest,
+  UserRepository,
+  UserUpdateRequest,
+} from "users";
 
 class UserRepositoryImpl implements UserRepository {
   private pool: Pool;
@@ -9,7 +14,7 @@ class UserRepositoryImpl implements UserRepository {
     this.pool = pool;
   }
 
-  async save(userCreateRequest: UserCreateRequest) {
+  async save(userCreateRequest: Omit<UserCreateRequest, "passwordConfirm">) {
     const { name, email, company, wage, password } = userCreateRequest;
 
     const client = await this.pool.connect();
@@ -40,6 +45,18 @@ class UserRepositoryImpl implements UserRepository {
     const result = await client.query(query, [userId]);
     client.release();
 
+    return result.rows[0];
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    const client = await this.pool.connect();
+    const query = `
+      SELECT name, email, password, company, wage
+        FROM users
+        WHERE email=$1
+    `;
+    const result = await client.query(query, [email]);
+    client.release();
     return result.rows[0];
   }
 

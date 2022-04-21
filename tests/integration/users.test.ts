@@ -24,7 +24,7 @@ describe("user integration test", () => {
 
   it("GET /api/users/:userId", async () => {
     const res = await request(app).get(`/api/users/${userId}`).send();
-    console.log(res.body);
+
     expect(res.statusCode).toEqual(200);
     expect(res.body.name).toEqual(newUser.name);
   });

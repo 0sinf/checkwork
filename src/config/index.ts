@@ -11,4 +11,5 @@ export default {
     password: process.env.DB_PASSWORD,
     port: +process.env.DB_PORT || 5432,
   },
+  saltRounds: +process.env.BCRYPT_SALT_ROUNDS,
 };

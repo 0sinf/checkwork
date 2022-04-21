@@ -21,11 +21,18 @@ export interface User {
 }
 
 export interface UserRepository {
-  save(userCreateRequest: UserCreateRequest): Promise<number>;
+  save(
+    userCreateRequest: Omit<UserCreateRequest, "passwordConfirm">
+  ): Promise<number>;
+
   findById(userId: number): Promise<User>;
+
+  findByEmail(email: string): Promise<User>;
+
   findByIdAndUpdate(
     userId: number,
     userUpdateRequest: UserUpdateRequest
   ): Promise<UserUpdateRequest>;
+
   findByIdAndDelete(userId: number): Promise<void>;
 }
