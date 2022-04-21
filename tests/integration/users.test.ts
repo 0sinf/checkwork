@@ -40,6 +40,16 @@ describe("user integration test", () => {
     expect(res.body.company).toEqual(updateUser.company);
   });
 
+  it("POST /api/users/login", async () => {
+    const res = await request(app).post("/api/users/login").send({
+      email: newUser.email,
+      password: newUser.password,
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.name).toEqual(newUser.name);
+  });
+
   it("DELETE /api/users/:userId", async () => {
     const res = await request(app).delete(`/api/users/${userId}`).send();
 
