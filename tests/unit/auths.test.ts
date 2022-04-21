@@ -1,11 +1,14 @@
-import * as bcrypt from "bcrypt";
-import authService from "../../src/services/auths.service";
+import { AuthService, authService } from "../../src/services/auths.service";
 import userRepository from "../../src/models/users.model";
-import config from "../../src/config";
 
 jest.mock("../../src/models/users.model", () => ({
   findByEmail: jest.fn(),
 }));
+
+const isIncorrectPasswordSpy = jest.spyOn(
+  AuthService.prototype as any,
+  "isIncorrectPassword"
+);
 
 const user = {
   email: "email@email.com",
@@ -16,26 +19,25 @@ const user = {
 };
 
 describe("auth service login", () => {
-  beforeEach(() => {
-    const salt = bcrypt.genSaltSync(config.saltRounds);
-    const hashedPassword = bcrypt.hashSync(user.password, salt);
-    (userRepository.findByEmail as jest.Mock).mockReturnValue({
-      ...user,
-      password: hashedPassword,
-    });
-  });
-
   it("should exist authService.login", () => {
     expect(typeof authService.login).toEqual("function");
   });
 
   it("should call findByEmail", async () => {
+    (userRepository.findByEmail as jest.Mock).mockReturnValue(user);
+    isIncorrectPasswordSpy.mockReturnValue(false);
+
     await authService.login(user.email, user.password);
+
     expect(userRepository.findByEmail).toBeCalledWith(user.email);
   });
 
   it("should return user infomation", async () => {
+    (userRepository.findByEmail as jest.Mock).mockReturnValue(user);
+    isIncorrectPasswordSpy.mockReturnValue(false);
+
     const result = await authService.login(user.email, user.password);
+
     expect(result).toEqual({
       email: user.email,
       name: user.name,
@@ -45,6 +47,9 @@ describe("auth service login", () => {
   });
 
   it("should throw error when doesn't match user password", async () => {
+    (userRepository.findByEmail as jest.Mock).mockReturnValue(user);
+    isIncorrectPasswordSpy.mockReturnValue(true);
+
     const t = authService.login(user.email, "not equal password");
 
     await expect(t).rejects.toThrow(new Error("비밀번호가 일치하지 않습니다."));

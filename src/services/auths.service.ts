@@ -2,7 +2,7 @@ import * as bcrypt from "bcrypt";
 import { UserRepository } from "users";
 import userRepository from "../models/users.model";
 
-class AuthService {
+export class AuthService {
   private readonly userRepository: UserRepository;
 
   constructor() {
@@ -29,4 +29,4 @@ class AuthService {
 
 const authService = new AuthService();
 
-export default authService;
+export { authService };
