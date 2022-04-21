@@ -1,6 +1,7 @@
 import * as bcrypt from "bcrypt";
 import { UserRepository } from "users";
 import userRepository from "../models/users.model";
+import { generateJsonWebToken } from "../utils/jwt";
 
 export class AuthService {
   private readonly userRepository: UserRepository;
@@ -19,7 +20,10 @@ export class AuthService {
     if (this.isIncorrectPassword(password, hashedPassword)) {
       throw new Error("비밀번호가 일치하지 않습니다.");
     }
-    return userExceptPassword;
+
+    const token = generateJsonWebToken(userExceptPassword);
+
+    return token;
   }
 
   private isIncorrectPassword(password: string, hashedPassword: string) {

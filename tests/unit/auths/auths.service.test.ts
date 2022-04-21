@@ -32,18 +32,13 @@ describe("auth service login", () => {
     expect(userRepository.findByEmail).toBeCalledWith(user.email);
   });
 
-  it("should return user infomation", async () => {
+  it("should return token", async () => {
     (userRepository.findByEmail as jest.Mock).mockReturnValue(user);
     isIncorrectPasswordSpy.mockReturnValue(false);
 
     const result = await authService.login(user.email, user.password);
 
-    expect(result).toEqual({
-      email: user.email,
-      name: user.name,
-      company: user.company,
-      wage: user.wage,
-    });
+    expect(typeof result).toEqual("string");
   });
 
   it("should throw error when doesn't match user password", async () => {
