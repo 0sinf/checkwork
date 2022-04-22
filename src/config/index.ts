@@ -12,4 +12,7 @@ export default {
     port: +process.env.DB_PORT || 5432,
   },
   saltRounds: +process.env.BCRYPT_SALT_ROUNDS,
-};
+  jwt: {
+    payload: process.env.JWT_PAYLOAD,
+  },
+}
