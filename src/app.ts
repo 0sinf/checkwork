@@ -18,8 +18,10 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(400).json(error);
 });
 
-app.listen(config.port, () => {
-  console.log("Start App");
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(config.port, () => {
+    console.log("Start App");
+  });
+}
 
 export default app;

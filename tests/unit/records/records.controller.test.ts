@@ -8,7 +8,6 @@ import {
 
 import * as recordController from "../../../src/controllers/records.controller";
 import recordService from "../../../src/services/records.service";
-import recordRepository from "../../../src/models/records.model";
 
 let req: MockRequest<Request>, res: MockResponse<Response>, next: NextFunction;
 const now = new Date();

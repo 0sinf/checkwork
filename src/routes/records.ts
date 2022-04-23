@@ -1,10 +1,8 @@
 import { Router } from "express";
+import * as recordController from "../controllers/records.controller";
 
 const recordRouter = Router();
 
-recordRouter.post("/", (req, res) => {
-  console.log(req.body);
-  res.status(201).json({ isOk: true });
-});
+recordRouter.post("/", recordController.createRecord);
 
 export default recordRouter;
