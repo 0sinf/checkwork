@@ -20,7 +20,7 @@ describe("record service save", () => {
 
   it("should call save", async () => {
     await recordService.createRecord(record);
-    console.log(record);
+
     expect(recordRepository.save).toBeCalledWith(record);
   });
 });
